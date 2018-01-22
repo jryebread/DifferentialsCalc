@@ -1,8 +1,7 @@
 //**Ordinary Differential Equation**\\
 public class ODE {
 
-    public ODE(String eq, char depVar, char indVar)
-    {
+    public ODE(String eq, char depVar, char indVar) {
         m_eq = eq;
         m_depVar = depVar;
         m_indVar = indVar;
@@ -11,6 +10,7 @@ public class ODE {
 
 
     }
+
     // 1.check for y and all its derivatives are of 1st degree
     // 2. if all coefficients of the dependent var and its derivatives are independent functions or are constants
     private boolean parseEq(String eq) {
@@ -21,16 +21,16 @@ public class ODE {
         //parse degree
         for(int x = 0; x < eq.length(); ++x)
         {
-            if(eq.charAt(x) == '^')
+            if(eq.charAt(x) == '^' && eq.charAt(x-1) != m_indVar)
             {
                 if(Character.getNumericValue(eq.charAt(x+1)) > Character.getNumericValue(pos_Degree))
                     pos_Degree = eq.charAt(x+1);
             }
-            if(eq.charAt(x) == m_depVar)
+            if(eq.charAt(x) == m_depVar && x > 1)
             {
-                if(Character.isDigit(eq.charAt(x-1)) && eq.charAt(x-2) == '^' && eq.charAt(x-3) == m_depVar)
+                if(x > 2 && Character.isDigit(eq.charAt(x-1)) && eq.charAt(x-2) == '^' && eq.charAt(x-3) == m_depVar)
                 {
-                        return false;
+                    return false;
                 }
                 else if(eq.charAt(x-1) == m_depVar)
                 {
@@ -45,6 +45,7 @@ public class ODE {
         else
             return true;
     }
+
     public int getDegree()
     {
         return m_degree;
@@ -52,6 +53,10 @@ public class ODE {
     public int getOrder()
     {
         return m_order;
+    }
+    public boolean getLinearity()
+    {
+        return m_linearity;
     }
     //data
     private String m_eq;
